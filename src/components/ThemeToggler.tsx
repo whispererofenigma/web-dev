@@ -1,72 +1,54 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Sun, Moon } from "lucide-react";
 
 const ThemeToggler = () => {
   const [theme, setTheme] = useState("light");
 
+  // Effect to set the initial theme
   useEffect(() => {
-    if (
-      localStorage.theme === "dark" ||
-      (!("theme" in localStorage) &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
-    ) {
-      document.documentElement.classList.add("dark");
+    const savedTheme = localStorage.getItem("theme");
+    const systemPrefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+
+    if (savedTheme === "dark" || (!savedTheme && systemPrefersDark)) {
       setTheme("dark");
     } else {
-      document.documentElement.classList.remove("dark");
       setTheme("light");
     }
   }, []);
+  
+  // Effect to apply the theme class to <html>
+  useEffect(() => {
+    const root = window.document.documentElement;
+    root.classList.remove(theme === "light" ? "dark" : "light");
+    root.classList.add(theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
 
   const toggleTheme = () => {
-    if (theme === "light") {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-      setTheme("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-      setTheme("light");
-    }
+    setTheme(theme === "light" ? "dark" : "light");
   };
 
   return (
     <button
       onClick={toggleTheme}
-      className="neumorphic-inset p-3 rounded-full focus:outline-none"
+      className="relative flex items-center justify-center rounded-full w-10 h-10 bg-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background focus:ring-ring"
+      aria-label="Toggle theme"
     >
-      {theme === "light" ? (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-          />
-        </svg>
-      ) : (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-          />
-        </svg>
-      )}
+      <Sun
+        className={`w-6 h-6 text-foreground transition-all duration-500 ${
+          theme === "dark" ? "rotate-90 scale-0" : "rotate-0 scale-100"
+        }`}
+      />
+      <Moon
+        className={`w-6 h-6 text-foreground absolute transition-all duration-500 ${
+          theme === "dark" ? "rotate-0 scale-100" : "-rotate-90 scale-0"
+        }`}
+      />
     </button>
   );
 };

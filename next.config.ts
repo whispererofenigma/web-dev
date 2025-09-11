@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/coins/images/**",
       },
+      {
+        protocol: "https",
+        hostname: "ui-avatars.com",
+       
+      },
     ],
   },
 };

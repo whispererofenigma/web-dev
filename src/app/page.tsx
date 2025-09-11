@@ -9,14 +9,18 @@ import ContactSection from "@/components/ContactSection";
 
 export default function Home() {
   return (
-    <main className="flex flex-col items-center justify-center">
+    <main className="flex min-h-screen flex-col items-center overflow-x-hidden">
       <HeroSection />
-      <ServicesSection />
-      <PortfolioSection />
-      <LiveDataShowcaseSection />
-      <InteractiveDashboardSection />
-      <UiShowcaseSection />
-      <CrudShowcaseSection />
+      {/* Wrapper for main content sections */}
+      <div className="w-full px-4 sm:px-6 lg:px-8">
+        <ServicesSection />
+        <PortfolioSection />
+        <LiveDataShowcaseSection />
+        <InteractiveDashboardSection />
+        <UiShowcaseSection />
+        <CrudShowcaseSection />
+      </div>
+      {/* Full-width sections */}
       <ContactSection />
     </main>
   );
